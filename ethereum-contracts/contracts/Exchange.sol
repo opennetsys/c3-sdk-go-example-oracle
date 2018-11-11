@@ -9,9 +9,12 @@ contract Exchange is Ownable {
   event LogDeposit(address sender, uint256 value);
   event LogBuy(address sender, uint256 amount, uint256 price, uint256 value);
   event LogWithdrawal(address receiver, uint256 value);
+  event LogCancelOrder(address sender, uint256 orderId);
 
+  // TODO: use struct
   mapping (address => uint256) public deposits;
   mapping (uint256 => bytes32) public orders;
+  mapping (uint256 => address) public orderSenders;
   mapping (uint256 => uint256) public orderValues;
   mapping (uint256 => bool) public cancelledOrders;
 
@@ -22,7 +25,6 @@ contract Exchange is Ownable {
     transferOwnership(_owner);
   }
 
-  /// amount of EOS to buy and at what price
   function deposit() public payable {
     deposits[msg.sender] = deposits[msg.sender].add(msg.value);
 
@@ -34,6 +36,7 @@ contract Exchange is Ownable {
     deposits[msg.sender] = deposits[msg.sender].add(msg.value);
     orders[nextId] = keccak256(abi.encodePacked(msg.sender, amount, price, msg.value));
     orderValues[nextId] = msg.value;
+    orderSenders[nextId] = msg.sender;
 
     nextId++;
 
@@ -41,8 +44,11 @@ contract Exchange is Ownable {
   }
 
   function cancelOrder(uint256 orderId) public {
+    require(orderSenders[orderId] == msg.sender);
     require(cancelledOrders[orderId] == false);
     cancelledOrders[orderId] = true;
+
+    emit LogCancelOrder(msg.sender, orderId);
   }
 
   function withdraw(address receiver, uint256 value) onlyOwner public {
