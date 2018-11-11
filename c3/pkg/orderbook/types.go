@@ -3,6 +3,7 @@ package orderbook
 import (
 	"math/big"
 
+	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/chain"
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/currency"
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/ordertype"
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/store"
@@ -11,6 +12,11 @@ import (
 
 type Options struct {
 	PostgresURL string
+}
+
+type UpsertAccount struct {
+	Account string                    `json:"account"`
+	Chain   chain.SupportedChainTyper `json:"chain"`
 }
 
 type Service struct {

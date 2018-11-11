@@ -85,7 +85,7 @@ func (s *Service) GetBalance(get *storetypes.GetBalance) (*storetypes.GetBalance
 
 		LIMIT
 			1;
-	`, get.Account, get.Currency.String()).Scan(&balance); err != nil {
+	`, get.Account, get.Currency).Scan(&balance); err != nil {
 		if err == sql.ErrNoRows {
 			return &storetypes.GetBalanceReturn{
 				Account:  get.Account,
@@ -113,13 +113,11 @@ func (s *Service) GetBalance(get *storetypes.GetBalance) (*storetypes.GetBalance
 }
 
 func (s *Service) GetTradableBalance(get *storetypes.GetBalance) (*storetypes.GetBalanceReturn, error) {
-	log.Printf("get %s", *get)
 	fullBalance, err := s.GetBalance(get)
 	if err != nil {
 		log.Printf("err getting balance\n%v", err)
 		return nil, err
 	}
-	log.Printf("full balance %s", fullBalance.Balance.String())
 
 	// note: balance has non-null constraint
 	rows, err := s.db.Query(`
@@ -210,10 +208,20 @@ func (s *Service) GetTradableBalance(get *storetypes.GetBalance) (*storetypes.Ge
 }
 
 func (s *Service) ModifyBalance(mod *storetypes.ModifyBalance) (*storetypes.ModifyBalanceReturn, error) {
+	bal, err := s.GetBalance(&storetypes.GetBalance{
+		Account:  mod.Account,
+		Currency: mod.Currency,
+	})
+	if err != nil {
+		log.Printf("err getting balance\n%v", err)
+		return nil, err
+	}
+
+	_ = bal.Balance.Add(bal.Balance, mod.Amount)
+
 	// note: this is bad but I'm sick of fighting SQL
-	var count int
-	newBal := new(big.Int)
-	if err := s.db.QueryRow(`
+	var count, b int
+	if err = s.db.QueryRow(`
 		SELECT
 			COUNT(*)
 
@@ -230,32 +238,22 @@ func (s *Service) ModifyBalance(mod *storetypes.ModifyBalance) (*storetypes.Modi
 			return nil, err
 		}
 	}
+	log.Printf("count is %d", count)
 	if count == 0 {
-		if _, err := s.db.Exec(`
+		if _, err = s.db.Exec(`
 			INSERT INTO
 				balances(account_id, currency, balance)
 
 			VALUES
 				((SELECT id FROM accounts WHERE UPPER(address) = UPPER($2)), $3, CAST($1 AS numeric))
-		`, mod.Amount.String(), mod.Account, mod.Currency.String()); err != nil {
+		`, bal.Balance.String(), mod.Account, mod.Currency.String()); err != nil {
 			log.Printf("err inserting balance\n%v", err)
 			return nil, err
 		}
-		newBal = mod.Amount
 
 	} else {
-		bal, err := s.GetBalance(&storetypes.GetBalance{
-			Account:  mod.Account,
-			Currency: mod.Currency,
-		})
-		if err != nil {
-			log.Printf("err getting balance\n%v", err)
-			return nil, err
-		}
 
-		_ = bal.Balance.Add(bal.Balance, mod.Amount)
-
-		if _, err = s.db.Exec(`
+		if err = s.db.QueryRow(`
 			UPDATE
 				balances
 
@@ -263,25 +261,28 @@ func (s *Service) ModifyBalance(mod *storetypes.ModifyBalance) (*storetypes.Modi
 				balance = CAST($1 AS numeric)
 
 			FROM
-				accounts
+				balances b2
+				LEFT JOIN accounts ON b2.account_id = accounts.id
 
 			WHERE
-				balances.account_id = accounts.id AND
 				UPPER(accounts.address) = UPPER($2) AND
-				UPPER(currency) = UPPER($3)
-		`, bal.Balance.String(), mod.Account, mod.Currency.String()); err != nil {
+				UPPER(b2.currency) = UPPER($3)
+
+			RETURNING
+				b2.balance;
+		`, bal.Balance.String(), mod.Account, mod.Currency.String()).Scan(&b); err != nil {
 			log.Printf("err updating balance\n%v", err)
 			return nil, err
 		}
 
-		newBal = bal.Balance
+		bal.Balance = big.NewInt(int64(b))
 	}
 
 	return &storetypes.ModifyBalanceReturn{
 		Account:  mod.Account,
 		Currency: mod.Currency,
-		Balance:  newBal,
-	}, nil
+		Balance:  bal.Balance,
+	}, err
 }
 
 func (s *Service) InsertOrder(order *storetypes.InsertOrder) (uint64, error) {
@@ -291,7 +292,7 @@ func (s *Service) InsertOrder(order *storetypes.InsertOrder) (uint64, error) {
 			orderbook(account_id, symbol, type, rate, quantity)
 
 		VALUES
-			((SELECT id FROM accounts WHERE UPPER(address) = UPPER($1)), $2, $3, $4, $5)
+			(SELECT id FROM accounts WHERE UPPER(address) = UPPER($1)), $2, $3, $4, $5)
 
 		RETURNING
 			id;
@@ -310,16 +311,17 @@ func (s *Service) UpdateOrder(order *storetypes.UpdateOrder) error {
 
 		SET
 			symbol = $2,
-			type::text = $3,
+			type = $3,
 			rate = $4,
 			amount = $5
 
 		FROM
-			accounts 
+
+		orderbook u2
+		LEFT JOIN accounts ON u2.account_id = accounts.id
 
 		WHERE
-			orderbook.account_id = accounts.id AND
-			orderbook.id = $6 AND
+			u2.id = $6 AND
 			accounts.address = $1
 	`, order.Account, order.Symbol.String(), order.Type.String(), order.Rate, order.Amount.String(), order.ID)
 
@@ -328,17 +330,17 @@ func (s *Service) UpdateOrder(order *storetypes.UpdateOrder) error {
 
 func (s *Service) CancelOrder(order *storetypes.CancelOrder) error {
 	_, err := s.db.Exec(`
-		DELETE FROM
+		DELETE
 			orderbook
 
-		USING
-			orderbook o1
-			LEFT JOIN accounts ON o1.account_id = accounts.id
+		FROM
+			orderbook u2
+			LEFT JOIN accounts ON u2.account_id = accounts.id
 
 		WHERE
-			o1.id = $1 AND
+			u2.id = $1 AND
 			UPPER(accounts.address) = UPPER($2) AND
-			UPPER(o1.symbol) = UPPER($3)
+			UPPER(u2.symbol) = UPPER($3)
 	`, order.ID, order.Account, order.Symbol.String())
 
 	return err
@@ -368,7 +370,7 @@ func (s *Service) GetOpenOrders(open *storetypes.GetOpenOrders) ([]*storetypes.G
 			LEFT JOIN accounts ON orderbook.account_id = accounts.id
 
 		WHERE
-		orderbook.type::text = UPPER($1) AND
+			UPPER(orderbook.type) = UPPER($1) AND
 			orderbook.rate %s $2 AND
 			UPPER(orderbook.symbol) = UPPER($3)
 

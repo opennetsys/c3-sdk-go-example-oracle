@@ -2,13 +2,15 @@ CREATE TABLE IF NOT EXISTS public.accounts
 (
     id bigserial NOT NULL,
     address text NOT NULL,
+    chain text NOT NULL,
+    UNIQUE(address, chain),
     CONSTRAINT accounts_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
-CREATE INDEX IF NOT EXISTS account_address_index ON orderbook(address);
+CREATE INDEX IF NOT EXISTS account_address_index ON accounts(address);
 
 
 

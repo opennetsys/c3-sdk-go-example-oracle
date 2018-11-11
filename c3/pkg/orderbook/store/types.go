@@ -3,10 +3,16 @@ package store
 import (
 	"math/big"
 
+	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/chain"
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/currency"
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/ordertype"
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/symbol"
 )
+
+type UpsertAccount struct {
+	Account string                    `json:"account"`
+	Chain   chain.SupportedChainTyper `json:"chain"`
+}
 
 type ModifyBalance struct {
 	Account  string                      `json:"account"`

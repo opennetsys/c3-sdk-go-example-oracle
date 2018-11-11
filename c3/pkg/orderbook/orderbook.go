@@ -24,18 +24,29 @@ func New(opts *Options) (*Service, error) {
 	}, err
 }
 
+func (s *Service) UpsertAccount(account *UpsertAccount) (uint64, error) {
+	return s.store.UpsertAccount(&storetypes.UpsertAccount{
+		Account: account.Account,
+		Chain:   account.Chain,
+	})
+}
+
 func (s *Service) Deposit(dep *Deposit) (*DepositReturn, error) {
 	ret, err := s.store.ModifyBalance(&storetypes.ModifyBalance{
 		Account:  dep.Account,
 		Currency: dep.Currency,
 		Amount:   dep.Amount,
 	})
+	if err != nil {
+		log.Printf("err modifying balance\n%v", err)
+		return nil, err
+	}
 
 	return &DepositReturn{
 		Account:  ret.Account,
 		Currency: ret.Currency,
 		Balance:  ret.Balance,
-	}, err
+	}, nil
 }
 
 func (s *Service) Withdrawal(with *Withdrawal) (*WithdrawalReturn, error) {
@@ -90,9 +101,9 @@ func (s *Service) PlaceOrder(order *PlaceOrder) (*PlaceOrderReturn, error) {
 	}
 
 	if t == ordertype.BID {
-		c, err = currency.SupportedTypeFromString(coins[1])
-	} else {
 		c, err = currency.SupportedTypeFromString(coins[0])
+	} else {
+		c, err = currency.SupportedTypeFromString(coins[1])
 	}
 
 	bal, err := s.store.GetTradableBalance(&storetypes.GetBalance{
@@ -104,6 +115,7 @@ func (s *Service) PlaceOrder(order *PlaceOrder) (*PlaceOrderReturn, error) {
 		return nil, err
 	}
 
+	log.Printf("coin: %s; balance: %s", c.String(), bal.Balance.String())
 	if bal.Balance.Cmp(order.Amount) < 0 {
 		return nil, errors.New("not enough funds")
 	}
