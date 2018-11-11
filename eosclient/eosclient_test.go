@@ -2,6 +2,7 @@ package eosclient
 
 import (
 	"fmt"
+	"math/big"
 	"testing"
 )
 
@@ -56,8 +57,8 @@ func TestGetTransaction(t *testing.T) {
 }
 
 func TestPushAction(t *testing.T) {
+	t.Skip()
 	client := NewClient(&Config{
-		//URL:   "http://api.kylin.alohaeos.com",
 		URL:   "https://api-kylin.eosasia.one",
 		Debug: true,
 	})
@@ -83,6 +84,54 @@ func TestPushAction(t *testing.T) {
 	client.SetSigner(wifPrivateKey)
 
 	resp, err := client.PushAction(action)
+	if err != nil {
+		t.Error(err)
+	}
+
+	fmt.Println(resp)
+}
+
+func TestGetActions(t *testing.T) {
+	t.Skip()
+	client := NewClient(&Config{
+		URL:   "https://api-kylin.eosasia.one",
+		Debug: true,
+	})
+
+	resp, err := client.GetActions("helloworld54", 0, 1000)
+	if err != nil {
+		t.Error(err)
+	}
+
+	_ = resp
+}
+
+func TestGetOrderEvents(t *testing.T) {
+	t.Skip()
+	client := NewClient(&Config{
+		URL:   "https://api-kylin.eosasia.one",
+		Debug: true,
+	})
+
+	events, err := client.GetOrderEvents("helloworld54")
+	if err != nil {
+		t.Error(err)
+	}
+
+	event := <-events
+	fmt.Println(event)
+}
+
+func TestWithdraw(t *testing.T) {
+	client := NewClient(&Config{
+		URL:   "https://api-kylin.eosasia.one",
+		Debug: true,
+	})
+
+	wifPrivateKey := "5Jh9tD4Fp1EpVn3EzEW6ura5NV3NddY8NNBcfpCZTvPDsKd9i5c"
+	client.SetSigner(wifPrivateKey)
+
+	resp, err := client.Withdraw("myaccount123", big.NewInt(1))
 	if err != nil {
 		t.Error(err)
 	}
