@@ -41,6 +41,6 @@ func SupportedTypeFromString(s string) (SupportedCoinTyper, error) {
 		return EOS, nil
 
 	default:
-		return nil, errors.New("unsupported coint type")
+		return nil, errors.New("unsupported coin type")
 	}
 }

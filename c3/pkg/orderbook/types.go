@@ -1,7 +1,12 @@
 package orderbook
 
 import (
-	"github.com/c3systems/Hackathon-EOS-SF-2018/pkg/orderbook/store"
+	"math/big"
+
+	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/currency"
+	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/ordertype"
+	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/store"
+	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/symbol"
 )
 
 type Options struct {
@@ -13,18 +18,48 @@ type Service struct {
 	store store.Interface
 }
 
-type Deposit struct{}
+type Deposit struct {
+	Account  string                      `json:"account"`
+	Currency currency.SupportedCoinTyper `json:"currency"`
+	Amount   *big.Int                    `json:"amount"`
+}
 
-type DepositReturn struct{}
+type DepositReturn struct {
+	Account  string                      `json:"account"`
+	Currency currency.SupportedCoinTyper `json:"currency"`
+	Balance  *big.Int                    `json:"balance"`
+}
 
-type Withdrawal struct{}
+type Withdrawal struct {
+	Account  string                      `json:"account"`
+	Currency currency.SupportedCoinTyper `json:"currency"`
+	Amount   *big.Int                    `json:"amount"`
+}
 
-type WithdrawalReturn struct{}
+type WithdrawalReturn struct {
+	Account  string                      `json:"account"`
+	Currency currency.SupportedCoinTyper `json:"currency"`
+	Balance  *big.Int                    `json:"balance"`
+}
 
-type Trade struct{}
+type PlaceOrder struct {
+	Account string                            `json:"account"`
+	Symbol  symbol.SupportedSymbolTyper       `json:"symbol"`
+	Type    ordertype.SupportedOrderTypeTyper `json:"orderType"`
+	Rate    float64                           `json:"rate"`
+	Amount  *big.Int                          `json:"amount"`
+}
 
-type TradeReturn struct{}
+type PlaceOrderReturn struct {
+	ID      *uint64                           `json:"id"`
+	Account string                            `json:"account"`
+	Symbol  symbol.SupportedSymbolTyper       `json:"symbol"`
+	Type    ordertype.SupportedOrderTypeTyper `json:"orderType"`
+	Filled  *big.Int                          `json:"filled"`
+}
 
-type CancelTrade struct{}
-
-type CancelTradeReturn struct{}
+type CancelOrder struct {
+	ID      uint64                      `json:"id"`
+	Account string                      `json:"account"`
+	Symbol  symbol.SupportedSymbolTyper `json:"symbol"`
+}

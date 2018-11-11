@@ -8,10 +8,11 @@ import (
 type supported int
 
 const (
+	// BASE_QUOTE
 	EOS_ETH supported = iota
 )
 
-// SupportedSymbolTyper are the coins supported by the packer
+// SupportedSymbolTyper are the symbols supported by the packer
 type SupportedSymbolTyper interface {
 	Type() supported
 	String() string
@@ -22,7 +23,7 @@ func (s supported) Type() supported {
 	return s
 }
 
-// AllSupportedSymbols returns all of the supported coins
+// AllSupportedSymbols returns all of the supported symbols
 func AllSupportedSymbols() []SupportedSymbolTyper {
 	return []SupportedSymbolTyper{
 		EOS_ETH,
