@@ -2,6 +2,7 @@
 #include <eosiolib/eosio.hpp>
 #include <eosiolib/time.hpp>
 #include <eosiolib/crypto.h>
+#include <eosiolib/asset.hpp>
 #include <eosiolib/print.h>
 
 using namespace eosio;
@@ -12,7 +13,7 @@ struct order
 {
 
   uint64_t id; // primary key
-  account_name sender;
+  name sender;
   uint64_t price;
   uint64_t amount;
   uint64_t value;
@@ -26,7 +27,7 @@ struct order
 struct deposit
 {
 
-  account_name sender;
+  name sender;
   uint64_t value;
 
   uint64_t primary_key() const { return sender; }
@@ -47,29 +48,44 @@ class exchange: public eosio::contract
 
     exchange(account_name s) : contract(s), orders_t(_self, _self), deposits_t(_self, _self) {}
 
-    void placeorder(account_name sender, uint64_t price, uint64_t amount, uint64_t value)
+    void placeorder(uint64_t price, uint64_t amount, uint64_t value)
     {
-      require_auth(sender);
+      require_auth(_self);
 
-      auto itr = deposits_t.find(sender);
+      auto itr = deposits_t.find(_self);
       if (itr != deposits_t.end())
       {
-        deposits_t.modify(itr, sender, [&](deposit &r) {
+        deposits_t.modify(itr, _self, [&](deposit &r) {
             r.value = r.value + value;
             });
       } else {
-        deposits_t.emplace(sender, [&](deposit &r) {
+        deposits_t.emplace(_self, [&](deposit &r) {
             r.value = value;
             });
       }
 
-      orders_t.emplace(sender, [&](order &r) {
+      orders_t.emplace(_self, [&](order &r) {
           r.price = price;
           r.amount = amount;
           r.value = value;
           });
 
     }
+
+    void withdraw(account_name receiver, asset value)
+    {
+      require_auth(_self);
+
+      account_name from = _self;
+
+      action(
+          permission_level{ from, N(active) },
+          N(eosio.token), N(transfer),
+          std::make_tuple(from, receiver, value, std::string(""))
+          ).send();
+
+    }
 };
 
-EOSIO_ABI(exchange, (placeorder))
+EOSIO_ABI(exchange, (placeorder)(withdraw))
+  ~
