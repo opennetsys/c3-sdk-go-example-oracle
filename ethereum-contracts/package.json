@@ -13,8 +13,11 @@
   "license": "MIT",
   "devDependencies": {
     "bn.js": "^4.11.8",
+    "dotenv": "^6.1.0",
     "ethereumjs-util": "^6.0.0",
     "moment": "^2.22.2",
+    "truffle-privatekey-provider": "^0.1.0",
+    "web3": "^1.0.0-beta.36",
     "web3-utils": "^1.0.0-beta.36"
   }
 }
