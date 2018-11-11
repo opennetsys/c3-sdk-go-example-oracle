@@ -1,0 +1,19 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bn.js": "^4.11.8",
+    "web3": "^1.0.0-beta.36",
+    "web3-detect-network": "0.0.17"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.3"
+  }
+}
