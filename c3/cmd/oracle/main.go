@@ -9,19 +9,31 @@ import (
 	"os"
 
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/cfg"
+	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/coder"
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/ethereumclient"
 	"github.com/c3systems/c3-go/common/c3crypto"
 	"github.com/c3systems/c3-go/common/txparamcoder"
 	"github.com/c3systems/c3-go/core/chain/mainchain"
 	"github.com/c3systems/c3-go/core/chain/statechain"
 	"github.com/c3systems/c3-go/core/p2p/protobuff"
+	methodTypes "github.com/c3systems/c3-go/core/types/methods"
+	nodetypes "github.com/c3systems/c3-go/node/types"
+	"github.com/davecgh/go-spew/spew"
 	ipfsaddr "github.com/ipfs/go-ipfs-addr"
+	csms "github.com/libp2p/go-conn-security-multistream"
+	lCrypt "github.com/libp2p/go-libp2p-crypto"
 	host "github.com/libp2p/go-libp2p-host"
 	peer "github.com/libp2p/go-libp2p-peer"
 	peerstore "github.com/libp2p/go-libp2p-peerstore"
+	"github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	secio "github.com/libp2p/go-libp2p-secio"
 	swarm "github.com/libp2p/go-libp2p-swarm"
+	tptu "github.com/libp2p/go-libp2p-transport-upgrader"
+	bhost "github.com/libp2p/go-libp2p/p2p/host/basic"
 	tcp "github.com/libp2p/go-tcp-transport"
+	ma "github.com/multiformats/go-multiaddr"
+	msmux "github.com/whyrusleeping/go-smux-multistream"
+	yamux "github.com/whyrusleeping/go-smux-yamux"
 )
 
 var (
@@ -52,7 +64,7 @@ func main() {
 
 	// 2. build the eth client
 	ch := make(chan interface{})
-	ethClient, err := ethereumclient.NewClient(&ethereumclient{
+	ethClient, err := ethereumclient.NewClient(&ethereumclient.Config{
 		NodeURL:         vars.ETH_NodeURL,
 		PrivateKey:      vars.ETH_PrivateKey,
 		ContractAddress: vars.ETH_ContractAddress,
@@ -73,17 +85,17 @@ func main() {
 
 			case *ethereumclient.LogBuy:
 				// note: don't need ok here bc of above switch statement
-				l, _ := v.(ethereumclient.LogBuy)
+				l, _ := v.(*ethereumclient.LogBuy)
 				go ethLogBuyHandler(ethClient, l)
 
 			case *ethereumclient.LogDeposit:
 				// note: don't need ok here bc of above switch statement
-				l, _ := v.(ethereumclient.LogDeposit)
+				l, _ := v.(*ethereumclient.LogDeposit)
 				go ethLogDepositHandler(ethClient, l)
 
 			case *ethereumclient.LogWithdrawal:
 				// note: don't need ok here bc of above switch statement
-				l, _ := v.(ethereumclient.LogWithdrawal)
+				l, _ := v.(*ethereumclient.LogWithdrawal)
 				go ethLogWithdrawalHandler(ethClient, l)
 
 			default:
@@ -94,7 +106,7 @@ func main() {
 	}()
 
 	// 3. build the c3 p2p node
-	if err := buildNode(*peer); err != nil {
+	if err := buildNode(vars.C3_NodeURL); err != nil {
 		log.Fatalf("err building node\n%v", err)
 	}
 
@@ -109,8 +121,8 @@ func main() {
 	select {}
 }
 
-func ethLogBuyHandler(ethClient *ethereumclient.Client, log *ethereumclient.LogBuy) {
-	b, err := coder.DecodeEthLogBuy(log)
+func ethLogBuyHandler(ethClient *ethereumclient.Client, l *ethereumclient.LogBuy) {
+	b, err := coder.EncodeETHLogBuy(l)
 	if err != nil {
 		log.Printf("err decoding\n%v", err)
 		return
@@ -154,10 +166,10 @@ func ethLogBuyHandler(ethClient *ethereumclient.Client, log *ethereumclient.LogB
 	}
 
 	res := <-ch
-	log.Printf.Printf("received response on channel %v", res)
+	log.Printf("received response on channel %v", res)
 }
-func ethLogDepositHandler(ethClient *ethereumclient.Client, log *ethereumclient.LogDeposit) {
-	b, err := coder.DecodeETHLogDeposit(log)
+func ethLogDepositHandler(ethClient *ethereumclient.Client, l *ethereumclient.LogDeposit) {
+	b, err := coder.EncodeETHLogDeposit(l)
 	if err != nil {
 		log.Printf("err decoding\n%v", err)
 		return
@@ -201,10 +213,10 @@ func ethLogDepositHandler(ethClient *ethereumclient.Client, log *ethereumclient.
 	}
 
 	res := <-ch
-	log.Printf.Printf("received response on channel %v", res)
+	log.Printf("received response on channel %v", res)
 }
-func ethLogWithdrawalHandler(ethClient *ethereumclient.Client, log *ethereumclient.LogWithdrawal) {
-	b, err := coder.DecodeETHLogWithdrawal(log)
+func ethLogWithdrawalHandler(ethClient *ethereumclient.Client, l *ethereumclient.LogWithdrawal) {
+	b, err := coder.EncodeETHLogWithdrawal(l)
 	if err != nil {
 		log.Printf("err decoding\n%v", err)
 		return
@@ -248,7 +260,7 @@ func ethLogWithdrawalHandler(ethClient *ethereumclient.Client, log *ethereumclie
 	}
 
 	res := <-ch
-	log.Printf.Printf("received response on channel %v", res)
+	log.Printf("received response on channel %v", res)
 }
 
 // note: https://github.com/libp2p/go-libp2p-swarm/blob/da01184afe4c67bec58c5e73f3350ad80b624c0d/testing/testing.go#L39
@@ -331,7 +343,7 @@ func buildNode(peerStr string) error {
 		return err
 	}
 
-	ps := peerstore.NewPeerstore()
+	ps := pstoremem.NewPeerstore()
 	if err = ps.AddPrivKey(pid, wPriv); err != nil {
 		log.Printf("err adding priv key %v", err)
 		return err
