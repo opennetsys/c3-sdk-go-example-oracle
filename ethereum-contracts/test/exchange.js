@@ -41,7 +41,7 @@ contract('Exchange', (accounts) => {
         const price = toEth(1).toString(10)
         const value = toEth(1).toString(10)
 
-        const result = await instance.buy(amount, price, {
+        const result = await instance.placeOrder(amount, price, {
           from: alice,
           value
         })
@@ -51,8 +51,11 @@ contract('Exchange', (accounts) => {
         const eventLog = await getLastEvent(instance)
         assert.equal(eventLog.event, 'LogBuy')
 
-        const bal = await web3.eth.getBalance(instance.address)
-        assert.equal(bal.toString(), value)
+        const contractBal = await web3.eth.getBalance(instance.address)
+        assert.equal(contractBal.toString(), value)
+
+        const senderBal = await instance.deposits.call(alice)
+        assert.equal(senderBal.toString(), value)
       })
     })
   })
