@@ -589,12 +589,12 @@
   version = "v1.0.1"
 
 [[projects]]
-  digest = "1:d5923fc1ed5596a94e93811ba498d13dc05a2d8a457ce4cd2a36a3daf645df3d"
+  branch = "master"
+  digest = "1:5cb6d4ea23a4b6600e84dd81d5e3ce32897f2ae5187a1a80b988b492075bbf82"
   name = "github.com/ipfs/go-verifcid"
   packages = ["."]
   pruneopts = ""
-  revision = "f9c8f6d8aa7ab6274c6f7033e2f23a81aaa40fa2"
-  version = "v0.0.4"
+  revision = "8909da14ac6dcfccc68166629ef29d98663ad5c4"
 
 [[projects]]
   digest = "1:69ba018801f808073bbbb2fc000112bf4c163284a76c0149eb45c5e521da80eb"
@@ -1538,6 +1538,7 @@
     "github.com/golang-migrate/migrate/database/postgres",
     "github.com/golang-migrate/migrate/source/file",
     "github.com/ipfs/go-ipfs-addr",
+    "github.com/ipfs/go-verifcid",
     "github.com/joho/godotenv",
     "github.com/lib/pq",
     "github.com/libp2p/go-libp2p-host",

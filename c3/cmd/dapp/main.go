@@ -41,14 +41,14 @@ func (s *App) processETHDeposit(depStr string) error {
 	}
 
 	// do stuff here ...
-	dep, err := coder.DecodeETHLogDeposit(depStr)
+	dep, err := coder.DecodeETHLogDeposit([]byte(depStr))
 	if err != nil {
 		log.Printf("err decoding eth log\n%v", err)
 		return err
 	}
 
-	receipt, err := obook.Deposit(&obook.Deposit{
-		Account:  dep.Sender.GetHex(),
+	receipt, err := obook.Deposit(&orderbook.Deposit{
+		Account:  dep.Sender.Hex(),
 		Currency: currency.ETH,
 		Amount:   dep.Value,
 	})
@@ -73,14 +73,14 @@ func (s *App) processETHWithdrawal(withdrawalStr string) error {
 	}
 
 	// do stuff here ...
-	withdrawal, err := coder.DecodeETHLogWithdrawal(withdrawalStr)
+	withdrawal, err := coder.DecodeETHLogWithdrawal([]byte(withdrawalStr))
 	if err != nil {
 		log.Printf("err decoding eth log\n%v", err)
 		return err
 	}
 
-	receipt, err := obook.Withdrawal(&obook.Withdrawal{
-		Account:  withdrawal.Account.GetHex(),
+	receipt, err := obook.Withdrawal(&orderbook.Withdrawal{
+		Account:  withdrawal.Receiver.Hex(),
 		Currency: currency.ETH,
 		Amount:   withdrawal.Value,
 	})
@@ -88,9 +88,9 @@ func (s *App) processETHWithdrawal(withdrawalStr string) error {
 		log.Printf("err withdrawing eth in c3\n%v", err)
 		return err
 	}
-	log.Printf("c3 withdrawal receipt\n%v", err)
+	log.Printf("c3 withdrawal receipt\n%v", receipt)
 
-	res, err := ethClient.Withdraw(withdrawal.Account.GetHex(), withdrawal.Value)
+	res, err := ethClient.Withdraw(withdrawal.Receiver.Hex(), withdrawal.Value)
 	if err != nil {
 		log.Printf("err withdrawing eth at the node\n%v", err)
 		return err
@@ -111,14 +111,14 @@ func (s *App) processETHBuy(buyStr string) error {
 	}
 
 	// do stuff here ...
-	buy, err := coder.DecodeETHLogBuy(buyStr)
+	buy, err := coder.DecodeETHLogBuy([]byte(buyStr))
 	if err != nil {
 		log.Printf("err decoding eth log\n%v", err)
 		return err
 	}
 
-	receipt, err := obook.PlaceOrder(&obook.PlaceOrder{
-		Account: buy.Sender.GetHex(),
+	receipt, err := obook.PlaceOrder(&orderbook.PlaceOrder{
+		Account: buy.Sender.Hex(),
 		Symbol:  symbol.EOS_ETH,
 		Type:    ordertype.BID,              // note: is this correct?
 		Rate:    float64(buy.Price.Int64()), // I'm assuming the rate was calucated correctly before this point
@@ -217,7 +217,7 @@ func main() {
 	vars = constants.Get()
 
 	// 2. build the orderbook
-	obook, err = orderbook.New(&obook.Options{
+	obook, err = orderbook.New(&orderbook.Options{
 		PostgresURL: vars.PostgresURL,
 	})
 	if err != nil {
@@ -226,7 +226,7 @@ func main() {
 
 	// 3. build the eth client
 	ch := make(chan interface{})
-	ethClient, err = ethereumclient.NewClient(&ethereumclient{
+	ethClient, err = ethereumclient.NewClient(&ethereumclient.Config{
 		NodeURL:         vars.ETH_NodeURL,
 		PrivateKey:      vars.ETH_PrivateKey,
 		ContractAddress: vars.ETH_ContractAddress,
@@ -265,6 +265,7 @@ func setState() error {
 		return err
 	}
 
+	return nil
 }
 
 func getState() error {

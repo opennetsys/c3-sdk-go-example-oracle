@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/gob"
 	"log"
+
+	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/ethereumclient"
 )
 
 func EncodeETHLogBuy(l *ethereumclient.LogBuy) ([]byte, error) {
@@ -43,39 +45,39 @@ func EncodeETHLogDeposit(l *ethereumclient.LogDeposit) ([]byte, error) {
 	return network.Bytes(), nil
 }
 func DecodeETHLogBuy(b []byte) (*ethereumclient.LogBuy, error) {
-	dec := gob.NewDecoder(b)
+	buf := bytes.NewBuffer(b)
+	dec := gob.NewDecoder(buf)
 
 	// Decode (receive) the value.
 	var l ethereumclient.LogBuy
-	err = dec.Decode(&l)
-	if err != nil {
-		log.Printf("decode error:", err)
+	if err := dec.Decode(&l); err != nil {
+		log.Printf("decode error:\n%v", err)
 		return nil, err
 	}
 
 	return &l, nil
 }
 func DecodeETHLogWithdrawal(b []byte) (*ethereumclient.LogWithdrawal, error) {
-	dec := gob.NewDecoder(b)
+	buf := bytes.NewBuffer(b)
+	dec := gob.NewDecoder(buf)
 
 	// Decode (receive) the value.
 	var l ethereumclient.LogWithdrawal
-	err = dec.Decode(&l)
-	if err != nil {
-		log.Printf("decode error:", err)
+	if err := dec.Decode(&l); err != nil {
+		log.Printf("decode error:\n%v", err)
 		return nil, err
 	}
 
 	return &l, nil
 }
 func DecodeETHLogDeposit(b []byte) (*ethereumclient.LogDeposit, error) {
-	dec := gob.NewDecoder(b)
+	buf := bytes.NewBuffer(b)
+	dec := gob.NewDecoder(buf)
 
 	// Decode (receive) the value.
 	var l ethereumclient.LogDeposit
-	err = dec.Decode(&l)
-	if err != nil {
-		log.Printf("decode error:", err)
+	if err := dec.Decode(&l); err != nil {
+		log.Printf("decode error:\n%v", err)
 		return nil, err
 	}
 

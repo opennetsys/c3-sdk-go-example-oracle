@@ -1,5 +1,6 @@
 required = [
-  "github.com/c3systems/c3-go"
+  "github.com/c3systems/c3-go",
+  "github.com/ipfs/go-verifcid"
 ]
 
 ignored = [
@@ -13,3 +14,7 @@ ignored = [
 [[constraint]]
   name = "github.com/c3systems/c3-sdk-go"
   branch = "develop"
+
+[[constraint]]
+  name = "github.com/ipfs/go-verifcid"
+  branch = "master"

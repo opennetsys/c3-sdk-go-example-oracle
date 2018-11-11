@@ -257,7 +257,7 @@ func (s *Client) ListenWithdrawal() {
 					continue
 				}
 
-				fmt.Printf("Event: %s\n", event.Sender)
+				fmt.Printf("Event: %s\n", event.Receiver)
 				s.listenChan <- &event
 
 			default:

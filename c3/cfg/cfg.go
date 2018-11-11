@@ -12,7 +12,7 @@ type Vars struct {
 	ETH_ContractAddress string
 	C3_NodeURL          string
 	ImageHash           string
-	Gensis              bool
+	Genesis             bool
 }
 
 func (v *Vars) validate() error {
@@ -109,7 +109,6 @@ func New(args []string) (*Constants, error) {
 		cli.BoolFlag{
 			Name:   "genesis",
 			Usage:  "Send a blank genesis block?",
-			Value:  false,
 			EnvVar: "GENESIS",
 		},
 	}
