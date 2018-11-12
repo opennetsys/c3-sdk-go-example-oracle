@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/postgres"
@@ -19,11 +20,22 @@ import (
 	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/symbol"
 )
 
+const (
+	retries int           = 5
+	wait    time.Duration = 5 * time.Second
+)
+
 func New(opts *Options) (*Service, error) {
 	db, err := sql.Open("postgres", opts.PostgresURL)
 	if err != nil {
 		log.Printf("err opening postgres; err: %v", err)
 		return nil, err
+	}
+	if err = db.Ping(); err != nil {
+		log.Printf("err pinging the db\n%v", err)
+		if err = retry(db); err != nil {
+			return nil, err
+		}
 	}
 
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
@@ -50,6 +62,19 @@ func New(opts *Options) (*Service, error) {
 		opts: opts,
 		db:   db,
 	}, db.Ping()
+}
+
+func retry(db *sql.DB) error {
+	time.Sleep(wait)
+	for i := 0; i < retries; i++ {
+		if err := db.Ping(); err != nil {
+			time.Sleep(wait)
+		} else {
+			return nil
+		}
+	}
+
+	return errors.New("couldn't connect to db")
 }
 
 func (s *Service) UpsertAccount(account *storetypes.UpsertAccount) (uint64, error) {

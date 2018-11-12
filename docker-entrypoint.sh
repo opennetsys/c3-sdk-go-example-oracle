@@ -1,4 +1,7 @@
 #!/bin/bash
 
-service postgresql restart &&\
-  go run /go/src/github.com/c3systems/Hackathon-EOS-SF-2018/cmd/dapp/main.go
+/etc/init.d/postgresql start &&\
+  sh ./wait-for-postgres.sh &&\
+  psql -U postgres --command "CREATE DATABASE db;" &&\
+  psql -U postgres --command "CREATE USER docker WITH SUPERUSER; ALTER USER docker VALID UNTIL 'infinity'; GRANT ALL PRIVILEGES ON DATABASE db TO docker;" &&\
+  go run /go/src/github.com/c3systems/Hackathon-EOS-SF-2018/c3/cmd/dapp/main.go

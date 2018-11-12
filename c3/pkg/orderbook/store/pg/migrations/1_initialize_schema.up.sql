@@ -10,7 +10,7 @@ WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
-CREATE INDEX IF NOT EXISTS account_address_index ON accounts(address);
+--CREATE INDEX IF NOT EXISTS account_address_index ON accounts(address);
 
 
 
@@ -50,5 +50,5 @@ WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
-CREATE INDEX IF NOT EXISTS account_orderbook_index ON orderbook(account_id, symbol, type);
-CREATE INDEX IF NOT EXISTS symbol_orderbook_index ON orderbook(symbol, type, rate);
+-- CREATE INDEX IF NOT EXISTS account_orderbook_index ON orderbook(account_id, symbol, type);
+-- CREATE INDEX IF NOT EXISTS symbol_orderbook_index ON orderbook(symbol, type, rate);
