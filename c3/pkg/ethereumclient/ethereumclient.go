@@ -41,17 +41,20 @@ type Client struct {
 func NewClient(config *Config) (*Client, error) {
 	client, err := ethclient.Dial(config.NodeURL)
 	if err != nil {
+		log.Printf("err dialing\n%v", err)
 		return nil, err
 	}
 
 	contractAddress := common.HexToAddress(config.ContractAddress)
 	instance, err := contract.NewExchange(contractAddress, client)
 	if err != nil {
+		log.Printf("err creating instance\n%v", err)
 		return nil, err
 	}
 
 	privateKey, err := crypto.HexToECDSA(config.PrivateKey)
 	if err != nil {
+		log.Printf("err converting private key hex to ecdsa\n%v", err)
 		return nil, err
 	}
 
@@ -64,11 +67,13 @@ func NewClient(config *Config) (*Client, error) {
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 	nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 	if err != nil {
+		log.Printf("err getting nonce\n%v", err)
 		return nil, err
 	}
 
 	gasPrice, err := client.SuggestGasPrice(context.Background())
 	if err != nil {
+		log.Printf("err getting suggested gas price\n%v", err)
 		return nil, err
 	}
 
