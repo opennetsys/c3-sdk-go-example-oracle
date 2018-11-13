@@ -3,6 +3,10 @@
 build:
 	@rm -rf build/ && truffle compile
 
+.PHONY: deps
+deps:
+	@npm i
+	@npm i -g truffle
 
 .PHONY: abi
 abi:

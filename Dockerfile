@@ -1,14 +1,9 @@
 FROM ubuntu:18.04
-#FROM ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 ENV POSTGRES_URL postgres://docker:docker@localhost:5432/db?sslmode=disable
-# note: this is insecure and just for demo purposes...
-ENV ETH_PRIVATE_KEY 522d78ad7f7f662f16fd1fe61cfccf80a5a0f85f3b6c1c70b644adf2434e2d57
-ENV ETH_CONTRACT_ADDRESS 0x629936e3a4f2577f1c366a511b811d71b4d877d2
-ENV ETH_NODE_URL wss://rinkeby.infura.io/ws
 
 RUN mkdir -p /go /go/bin /go/src /go/src/github.com/c3systems/Hackathon-EOS-SF-2018 /go/pkg &&\
   apt-get update -y && apt-get upgrade -y &&\
@@ -40,5 +35,10 @@ WORKDIR /go/src/github.com/c3systems/Hackathon-EOS-SF-2018
 # Copy the local package files to the container's workspace.
 COPY . /go/src/github.com/c3systems/Hackathon-EOS-SF-2018
 
+# note: this is insecure and just for demo purposes...
+ENV ETH_PRIVATE_KEY 18afdddf061ab614bdacff35bbe3c58b4b464a95db18aecfa7c266fd61b4850c
+ENV ETH_CONTRACT_ADDRESS 0xb366b07c070c380051893a33681a757116c9c685
+ENV ETH_NODE_URL wss://rinkeby.infura.io/ws
+
 RUN ["chmod", "+x", "/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh"]
-ENTRYPOINT ["/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh"]
+CMD ["/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh"]

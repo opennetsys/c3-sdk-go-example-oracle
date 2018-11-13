@@ -74,9 +74,7 @@ func main() {
 		log.Fatalf("err building the eth client\n%v", err)
 	}
 
-	go ethClient.ListenBuy()
-	go ethClient.ListenDeposit()
-	go ethClient.ListenWithdrawal()
+	go ethClient.Listen()
 	go func() {
 		for {
 			switch v := <-ch; v.(type) {
@@ -84,16 +82,19 @@ func main() {
 				log.Printf("err on the eth client\n%v", err)
 
 			case *ethereumclient.LogBuy:
+				log.Println("log buy event")
 				// note: don't need ok here bc of above switch statement
 				l, _ := v.(*ethereumclient.LogBuy)
 				go ethLogBuyHandler(ethClient, l)
 
 			case *ethereumclient.LogDeposit:
+				log.Println("log deposit event")
 				// note: don't need ok here bc of above switch statement
 				l, _ := v.(*ethereumclient.LogDeposit)
 				go ethLogDepositHandler(ethClient, l)
 
 			case *ethereumclient.LogWithdrawal:
+				log.Println("log withdrawal event")
 				// note: don't need ok here bc of above switch statement
 				l, _ := v.(*ethereumclient.LogWithdrawal)
 				go ethLogWithdrawalHandler(ethClient, l)
@@ -122,36 +123,43 @@ func main() {
 }
 
 func ethLogBuyHandler(ethClient *ethereumclient.Client, l *ethereumclient.LogBuy) {
+	log.Println("in buy handler")
 	b, err := coder.EncodeETHLogBuy(l)
 	if err != nil {
 		log.Printf("err decoding\n%v", err)
 		return
 	}
 
+	log.Println("building payload")
 	payload := txparamcoder.ToJSONArray(
 		txparamcoder.EncodeMethodName("processETHBuy"),
 		txparamcoder.EncodeParam(hex.EncodeToString(b)),
 	)
 
+	log.Println("building tx")
 	tx := statechain.NewTransaction(&statechain.TransactionProps{
 		ImageHash: vars.ImageHash,
 		Method:    methodTypes.InvokeMethod,
 		Payload:   payload,
 		From:      pubAddr,
 	})
+	log.Println("setting sig")
 	if err = tx.SetSig(priv); err != nil {
 		log.Printf("error setting sig\n%v", err)
 		return
 	}
+	log.Println("setting tx hash")
 	if err = tx.SetHash(); err != nil {
 		log.Printf("error setting hash\n%v", err)
 		return
 	}
+	log.Println("checking tx hash")
 	if tx.Props().TxHash == nil {
 		log.Println("tx hash is nil!")
 		return
 	}
 
+	log.Println("serializing")
 	txBytes, err := tx.Serialize()
 	if err != nil {
 		log.Printf("error getting tx bytes\n%v", err)
@@ -169,6 +177,7 @@ func ethLogBuyHandler(ethClient *ethereumclient.Client, l *ethereumclient.LogBuy
 	log.Printf("received response on channel %v", res)
 }
 func ethLogDepositHandler(ethClient *ethereumclient.Client, l *ethereumclient.LogDeposit) {
+	log.Println("in dep handler")
 	b, err := coder.EncodeETHLogDeposit(l)
 	if err != nil {
 		log.Printf("err decoding\n%v", err)
@@ -216,6 +225,7 @@ func ethLogDepositHandler(ethClient *ethereumclient.Client, l *ethereumclient.Lo
 	log.Printf("received response on channel %v", res)
 }
 func ethLogWithdrawalHandler(ethClient *ethereumclient.Client, l *ethereumclient.LogWithdrawal) {
+	log.Println("in withdrawal handler")
 	b, err := coder.EncodeETHLogWithdrawal(l)
 	if err != nil {
 		log.Printf("err decoding\n%v", err)
@@ -410,7 +420,7 @@ func buildNode(peerStr string) error {
 		return err
 	}
 
-	log.Println("FOO\n", pubAddr)
+	log.Println("pub addr\n", pubAddr)
 
 	return nil
 }

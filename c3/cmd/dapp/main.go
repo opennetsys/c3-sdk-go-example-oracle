@@ -237,10 +237,7 @@ func main() {
 	}
 
 	// 4. stat c3
-	go startC3()
-
-	// 5. wait
-	select {}
+	startC3()
 }
 
 func setState() error {

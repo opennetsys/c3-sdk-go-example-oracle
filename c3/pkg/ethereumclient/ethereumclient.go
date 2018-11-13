@@ -88,6 +88,7 @@ func NewClient(config *Config) (*Client, error) {
 		client:          client,
 		instance:        instance,
 		contractAddress: contractAddress,
+		listenChan:      config.ListenChan,
 	}, nil
 }
 
@@ -122,108 +123,7 @@ type LogWithdrawal struct {
 }
 
 // Listen ...
-func (s *Client) ListenBuy() {
-	query := ethereum.FilterQuery{
-		Addresses: []common.Address{s.contractAddress},
-	}
-
-	logs := make(chan types.Log)
-	sub, err := s.client.SubscribeFilterLogs(context.Background(), query, logs)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	contractAbi, err := abi.JSON(strings.NewReader(string(contract.ExchangeABI)))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	logBuySig := []byte("LogBuy(address,uint256,uint256,uint256)")
-	logBuySigHash := crypto.Keccak256Hash(logBuySig)
-
-	for {
-		select {
-		case err := <-sub.Err():
-			s.listenChan <- err
-
-		case vLog := <-logs:
-			fmt.Print("HERE")
-			switch vLog.Topics[0].Hex() {
-			case logBuySigHash.Hex():
-				fmt.Printf("Log Name: Transfer\n")
-
-				var event LogBuy
-
-				err := contractAbi.Unpack(&event, "LogBuy", vLog.Data)
-				if err != nil {
-					log.Printf("err unpacking abi\n%v", err)
-					s.listenChan <- err
-					continue
-				}
-
-				fmt.Printf("Event: %s\n", event.Sender)
-				s.listenChan <- &event
-
-			default:
-				log.Printf("unknown vlog topic\n%v", vLog)
-				s.listenChan <- errors.New("unknown vLog Topics type")
-
-			}
-		}
-	}
-}
-func (s *Client) ListenDeposit() {
-	query := ethereum.FilterQuery{
-		Addresses: []common.Address{s.contractAddress},
-	}
-
-	logs := make(chan types.Log)
-	sub, err := s.client.SubscribeFilterLogs(context.Background(), query, logs)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	contractAbi, err := abi.JSON(strings.NewReader(string(contract.ExchangeABI)))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	logDepositSig := []byte("LogDeposit(address,uint256)")
-	logDepositSigHash := crypto.Keccak256Hash(logDepositSig)
-
-	for {
-		select {
-		case err := <-sub.Err():
-			s.listenChan <- err
-
-		case vLog := <-logs:
-			fmt.Print("HERE - DEPOSIT")
-			switch vLog.Topics[0].Hex() {
-			case logDepositSigHash.Hex():
-				fmt.Printf("Log Name: Transfer\n")
-
-				var event LogDeposit
-
-				err := contractAbi.Unpack(&event, "LogDeposit", vLog.Data)
-				if err != nil {
-					log.Printf("err unpacking abi\n%v", err)
-					s.listenChan <- err
-					continue
-				}
-
-				fmt.Printf("Event: %s\n", event.Sender)
-				s.listenChan <- &event
-
-			default:
-				log.Printf("unknown vlog topic type %T\n%v", vLog, vLog)
-				s.listenChan <- errors.New("unknown vLog Topics type")
-
-			}
-		}
-	}
-}
-
-func (s *Client) ListenWithdrawal() {
+func (s *Client) Listen() {
 	query := ethereum.FilterQuery{
 		Addresses: []common.Address{s.contractAddress},
 	}
@@ -242,6 +142,12 @@ func (s *Client) ListenWithdrawal() {
 	logWithdrawalSig := []byte("LogWithdrawal(address,uint256)")
 	logWithdrawalSigHash := crypto.Keccak256Hash(logWithdrawalSig)
 
+	logDepositSig := []byte("LogDeposit(address,uint256)")
+	logDepositSigHash := crypto.Keccak256Hash(logDepositSig)
+
+	logBuySig := []byte("LogBuy(address,uint256,uint256,uint256)")
+	logBuySigHash := crypto.Keccak256Hash(logBuySig)
+
 	for {
 		select {
 		case err := <-sub.Err():
@@ -249,9 +155,39 @@ func (s *Client) ListenWithdrawal() {
 
 		case vLog := <-logs:
 			fmt.Print("HERE")
-			switch vLog.Topics[0].Hex() {
-			case logWithdrawalSigHash.Hex():
-				fmt.Printf("Log Name: Transfer\n")
+			switch strings.ToLower(vLog.Topics[0].Hex()) {
+			case strings.ToLower(logBuySigHash.Hex()):
+				fmt.Printf("Log Buy Name: Transfer\n")
+
+				var event LogBuy
+
+				err := contractAbi.Unpack(&event, "LogBuy", vLog.Data)
+				if err != nil {
+					log.Printf("err unpacking abi\n%v", err)
+					s.listenChan <- err
+					continue
+				}
+
+				fmt.Printf("Event: %s\n", event.Sender)
+				s.listenChan <- &event
+
+			case strings.ToLower(logDepositSigHash.Hex()):
+				fmt.Printf("Log Deposit Name: Transfer\n")
+
+				var event LogDeposit
+
+				err := contractAbi.Unpack(&event, "LogDeposit", vLog.Data)
+				if err != nil {
+					log.Printf("err unpacking abi\n%v", err)
+					s.listenChan <- err
+					continue
+				}
+
+				fmt.Printf("Event: %s\n", event.Sender)
+				s.listenChan <- &event
+
+			case strings.ToLower(logWithdrawalSigHash.Hex()):
+				fmt.Printf("Log Withdrawal Name: Transfer\n")
 
 				var event LogWithdrawal
 
@@ -266,7 +202,7 @@ func (s *Client) ListenWithdrawal() {
 				s.listenChan <- &event
 
 			default:
-				log.Printf("unknown vlog topic\n%v", vLog)
+				log.Printf("unknown vlog topic\ntype %T\n%s\nexpected %s", vLog, vLog.Topics[0].Hex(), logWithdrawalSigHash.Hex())
 				s.listenChan <- errors.New("unknown vLog Topics type")
 
 			}
