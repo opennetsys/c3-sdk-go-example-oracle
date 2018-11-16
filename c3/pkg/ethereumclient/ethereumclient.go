@@ -17,7 +17,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	contract "github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/contracts"
+	contract "github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/contracts"
 )
 
 // Config ...

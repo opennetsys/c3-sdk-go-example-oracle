@@ -5,7 +5,7 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 ENV POSTGRES_URL postgres://docker:docker@localhost:5432/db?sslmode=disable
 
-RUN mkdir -p /go /go/bin /go/src /go/src/github.com/c3systems/Hackathon-EOS-SF-2018 /go/pkg &&\
+RUN mkdir -p /go /go/bin /go/src /go/src/github.com/c3systems/c3-sdk-go-example-oracle /go/pkg &&\
   apt-get update -y && apt-get upgrade -y &&\
   apt-get install -y --no-install-recommends --fix-missing make curl python gnupg2 dirmngr golang-go build-essential ca-certificates &&\
   apt-get autoremove -y &&\
@@ -30,15 +30,15 @@ RUN rm /etc/postgresql/9.3/main/pg_hba.conf &&\
     /etc/init.d/postgresql restart
 
 # Cd into the api code directory
-WORKDIR /go/src/github.com/c3systems/Hackathon-EOS-SF-2018
+WORKDIR /go/src/github.com/c3systems/c3-sdk-go-example-oracle
 
 # Copy the local package files to the container's workspace.
-COPY . /go/src/github.com/c3systems/Hackathon-EOS-SF-2018
+COPY . /go/src/github.com/c3systems/c3-sdk-go-example-oracle
 
 # note: this is insecure and just for demo purposes...
 ENV ETH_PRIVATE_KEY 18afdddf061ab614bdacff35bbe3c58b4b464a95db18aecfa7c266fd61b4850c
 ENV ETH_CONTRACT_ADDRESS 0xb366b07c070c380051893a33681a757116c9c685
 ENV ETH_NODE_URL wss://rinkeby.infura.io/ws
 
-RUN chmod +x /go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh
-ENTRYPOINT /go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh
+RUN chmod +x /go/src/github.com/c3systems/c3-sdk-go-example-oracle/docker-entrypoint.sh
+ENTRYPOINT /go/src/github.com/c3systems/c3-sdk-go-example-oracle/docker-entrypoint.sh

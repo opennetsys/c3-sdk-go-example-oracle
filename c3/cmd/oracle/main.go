@@ -8,9 +8,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/cfg"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/coder"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/ethereumclient"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/cfg"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/coder"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/ethereumclient"
 	"github.com/c3systems/c3-go/common/c3crypto"
 	"github.com/c3systems/c3-go/common/txparamcoder"
 	"github.com/c3systems/c3-go/core/chain/mainchain"

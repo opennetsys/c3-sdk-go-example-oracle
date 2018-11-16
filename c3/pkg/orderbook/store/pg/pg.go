@@ -15,9 +15,9 @@ import (
 	_ "github.com/golang-migrate/migrate/source/file"
 	_ "github.com/lib/pq"
 
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/ordertype"
-	storetypes "github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/store"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/symbol"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/orderbook/ordertype"
+	storetypes "github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/orderbook/store"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/orderbook/symbol"
 )
 
 const (
@@ -46,7 +46,7 @@ func New(opts *Options) (*Service, error) {
 
 	gPath := os.Getenv("GOPATH")
 	m, err := migrate.NewWithDatabaseInstance(
-		fmt.Sprintf("file://%s/src/github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/store/pg/migrations", gPath),
+		fmt.Sprintf("file://%s/src/github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/orderbook/store/pg/migrations", gPath),
 		"postgres", driver,
 	)
 	if err != nil {

@@ -10,8 +10,8 @@ build:
 genesis:
 	@GENESIS=true go run c3/cmd/oracle/main.go
 
-.PHONY: tx
-tx:
+.PHONY: start
+start:
 	@GENESIS=false go run c3/cmd/oracle/main.go
 
 .PHONY: web

@@ -5,7 +5,7 @@ import (
 	"encoding/gob"
 	"log"
 
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/ethereumclient"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/ethereumclient"
 )
 
 func EncodeETHLogBuy(l *ethereumclient.LogBuy) ([]byte, error) {

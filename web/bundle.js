@@ -25098,9 +25098,9 @@ module.exports={
   "sourceMap": "76:1716:0:-;;;681:106;8:9:-1;5:2;;;30:1;27;20:12;5:2;681:106:0;;;;;;;;;;;;;;;;509:6:2;:19;;-1:-1:-1;;;;;;509:19:2;518:10;509:19;;;;681:106:0;;-1:-1:-1;;;;;572:6:2;;;;;-1:-1:-1;;;;;;;;;;;539:40:2;509:6;;539:40;-1:-1:-1;;;;;730:20:0;;;;722:29;;;;;;757:25;775:6;757:17;;;;:25;:::i;:::-;681:106;76:1716;;1561:101:2;824:9;:7;;;;:9;:::i;:::-;816:18;;;;;;;;1629:28;1648:8;1629:18;;;;:28;:::i;:::-;1561:101;:::o;926:83::-;965:4;998:6;-1:-1:-1;;;;;998:6:2;984:10;:20;;926:83::o;1796:169::-;-1:-1:-1;;;;;1865:22:2;;;;1857:31;;;;;;1920:6;;;1899:38;;-1:-1:-1;;;;;1899:38:2;;;;1920:6;;;-1:-1:-1;;;;;;;;;;;1899:38:2;;1943:6;:17;;-1:-1:-1;;;;;;1943:17:2;-1:-1:-1;;;;;1943:17:2;;;;;;;;;;1796:169::o;76:1716:0:-;;;;;;;",
   "deployedSourceMap": "76:1716:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;551:47;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;551:47:0;;;;;;;;;;;;;;;;;;;;;1362:232;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1362:232:0;;;;;;;655:21;;8:9:-1;5:2;;;30:1;27;20:12;5:2;655:21:0;;;;1273:127:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1273:127:2;;;;988:370:0;;;;;;;;499:48;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;499:48:0;;;;;;;;;-1:-1:-1;;;;;499:48:0;;;;;;;;;;;;;;639:70:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;639:70:2;;;;926:83;;8:9:-1;5:2;;;30:1;27;20:12;5:2;926:83:2;;;;;;;;;;;;;;;;;;;;;;453:42:0;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;453:42:0;;;;;602:48;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;602:48:0;;;;;791:148;;;;1561:101:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1561:101:2;-1:-1:-1;;;;;1561:101:2;;;;;1598:192:0;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1598:192:0;-1:-1:-1;;;;;1598:192:0;;;;;;;405:44;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;405:44:0;-1:-1:-1;;;;;405:44:0;;;;;551:47;;;;;;;;;;;;;:::o;1362:232::-;1421:21;;;;:12;:21;;;;;;-1:-1:-1;;;;;1421:21:0;1446:10;1421:35;1413:44;;;;;;1471:24;;;;:15;:24;;;;;;;;:33;1463:42;;;;;;1511:24;;;;:15;:24;;;;;;;;;:31;;-1:-1:-1;;1511:31:0;1538:4;1511:31;;;1554:35;;1569:10;1554:35;;;;;;;;;;;;;;;;;;;;;1362:232;:::o;655:21::-;;;;:::o;1273:127:2:-;824:9;:7;:9::i;:::-;816:18;;;;;;;;1367:1;1351:6;;1330:40;;-1:-1:-1;;;;;1351:6:2;;;;1330:40;;1367:1;;1330:40;1393:1;1376:19;;-1:-1:-1;;1376:19:2;;;1273:127::o;988:370:0:-;1092:10;1083:20;;;;:8;:20;;;;;;:35;;1108:9;1083:35;:24;:35;:::i;:::-;1069:10;1060:20;;;;:8;:20;;;;;;;;;:58;;;;1151:54;;;;;;;;;;;;;;;;;;;;;;1195:9;1151:54;;;;;;;;;;26:21:-1;;;22:32;;;6:49;;1151:54:0;;;;;;;;1141:65;;1151:54;;;;;;1141:65;;;;1151:54;1141:65;36:153:-1;66:2;58:11;;36:153;;176:10;;164:23;;-1:-1;;139:12;;;;98:2;89:12;;;;114;36:153;;;299:10;344;;-1:-1;;263:2;259:12;;;254:3;250:22;246:30;340:21;;;311:9;;295:26;;;;377:20;365:33;;1141:65:0;;;;;;;;;;;;1131:6;;;-1:-1:-1;1124:14:0;;;:6;:14;;;;;:82;;;;1224:6;;1212:19;;:11;:19;;;;;1234:9;1212:31;;;;1262:6;;1249:20;;:12;:20;;;;;;:33;;-1:-1:-1;;1249:33:0;1272:10;1249:33;;;;;;1289:8;;274:1:-1;1289:8:0;;;;1309:44;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;1309:44:0;;;;;;;-1:-1:-1;;1309:44:0;988:370;;:::o;499:48::-;;;;;;;;;;;;-1:-1:-1;;;;;499:48:0;;:::o;639:70:2:-;676:7;698:6;-1:-1:-1;;;;;698:6:2;639:70;:::o;926:83::-;965:4;998:6;-1:-1:-1;;;;;998:6:2;984:10;:20;;926:83::o;453:42:0:-;;;;;;;;;;;;;:::o;602:48::-;;;;;;;;;;;;;;;:::o;791:148::-;863:10;854:20;;;;:8;:20;;;;;;:35;;879:9;854:35;:24;:35;:::i;:::-;840:10;831:20;;;;:8;:20;;;;;;;;;:58;;;;901:33;;;;;924:9;901:33;;;;;;;;;;;;;;;;;;;;791:148::o;1561:101:2:-;824:9;:7;:9::i;:::-;816:18;;;;;;;;1629:28;1648:8;1629:18;:28::i;:::-;1561:101;:::o;1598:192:0:-;824:9:2;:7;:9::i;:::-;816:18;;;;;;;;-1:-1:-1;;;;;1680:18:0;;;;;;:8;:18;;;;;;:27;-1:-1:-1;1680:27:0;1672:36;;;;;;-1:-1:-1;;;;;1714:18:0;;;;;;:8;:18;;;;;;:29;;1737:5;1714:29;:22;:29;:::i;:::-;-1:-1:-1;1755:30:0;;;-1:-1:-1;;;;;1755:30:0;;;;;;;;;;;;;;;;;;;;;;;1598:192;;:::o;405:44::-;;;;;;;;;;;;;:::o;1497:215:3:-;1555:7;1586:5;;;1609:6;;;;;;:16;;;1624:1;1619;:6;;1609:16;1601:85;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1704:1;1497:215;-1:-1:-1;;;1497:215:3:o;1796:169:2:-;-1:-1:-1;;;;;1865:22:2;;;;1857:31;;;;;;1920:6;;;1899:38;;-1:-1:-1;;;;;1899:38:2;;;;1920:6;;;1899:38;;;1943:6;:17;;-1:-1:-1;;1943:17:2;-1:-1:-1;;;;;1943:17:2;;;;;;;;;;1796:169::o;1232:194:3:-;1290:7;;1317:6;;;;1309:64;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;1395:5:3;;;1232:194::o",
   "source": "pragma solidity ^0.4.23;\n\nimport \"./SafeMath.sol\";\nimport \"./Ownable.sol\";\n\ncontract Exchange is Ownable {\n  using SafeMath for uint256;\n\n  event LogDeposit(address sender, uint256 value);\n  event LogBuy(address sender, uint256 amount, uint256 price, uint256 value);\n  event LogWithdrawal(address receiver, uint256 value);\n  event LogCancelOrder(address sender, uint256 orderId);\n\n  // TODO: use struct\n  mapping (address => uint256) public deposits;\n  mapping (uint256 => bytes32) public orders;\n  mapping (uint256 => address) public orderSenders;\n  mapping (uint256 => uint256) public orderValues;\n  mapping (uint256 => bool) public cancelledOrders;\n\n  uint256 public nextId;\n\n  constructor(address _owner) public {\n    require(_owner != address(0));\n    transferOwnership(_owner);\n  }\n\n  function deposit() public payable {\n    deposits[msg.sender] = deposits[msg.sender].add(msg.value);\n\n    emit LogDeposit(msg.sender, msg.value);\n  }\n\n  /// amount of EOS to buy and at what price\n  function placeOrder(uint256 amount, uint256 price) public payable {\n    deposits[msg.sender] = deposits[msg.sender].add(msg.value);\n    orders[nextId] = keccak256(abi.encodePacked(msg.sender, amount, price, msg.value));\n    orderValues[nextId] = msg.value;\n    orderSenders[nextId] = msg.sender;\n\n    nextId++;\n\n    emit LogBuy(msg.sender, amount, price, msg.value);\n  }\n\n  function cancelOrder(uint256 orderId) public {\n    require(orderSenders[orderId] == msg.sender);\n    require(cancelledOrders[orderId] == false);\n    cancelledOrders[orderId] = true;\n\n    emit LogCancelOrder(msg.sender, orderId);\n  }\n\n  function withdraw(address receiver, uint256 value) onlyOwner public {\n    require(deposits[receiver] >= value);\n    deposits[receiver].sub(value);\n\n    emit LogWithdrawal(receiver, value);\n  }\n}\n",
-  "sourcePath": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/ethereum-contracts/contracts/Exchange.sol",
+  "sourcePath": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/ethereum-contracts/contracts/Exchange.sol",
   "ast": {
-    "absolutePath": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/ethereum-contracts/contracts/Exchange.sol",
+    "absolutePath": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/ethereum-contracts/contracts/Exchange.sol",
     "exportedSymbols": {
       "Exchange": [
         231
@@ -25121,7 +25121,7 @@ module.exports={
         "src": "0:24:0"
       },
       {
-        "absolutePath": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/ethereum-contracts/contracts/SafeMath.sol",
+        "absolutePath": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/ethereum-contracts/contracts/SafeMath.sol",
         "file": "./SafeMath.sol",
         "id": 2,
         "nodeType": "ImportDirective",
@@ -25132,7 +25132,7 @@ module.exports={
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/ethereum-contracts/contracts/Ownable.sol",
+        "absolutePath": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/ethereum-contracts/contracts/Ownable.sol",
         "file": "./Ownable.sol",
         "id": 3,
         "nodeType": "ImportDirective",
@@ -28132,7 +28132,7 @@ module.exports={
     "src": "0:1793:0"
   },
   "legacyAST": {
-    "absolutePath": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/ethereum-contracts/contracts/Exchange.sol",
+    "absolutePath": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/ethereum-contracts/contracts/Exchange.sol",
     "exportedSymbols": {
       "Exchange": [
         231
@@ -28153,7 +28153,7 @@ module.exports={
         "src": "0:24:0"
       },
       {
-        "absolutePath": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/ethereum-contracts/contracts/SafeMath.sol",
+        "absolutePath": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/ethereum-contracts/contracts/SafeMath.sol",
         "file": "./SafeMath.sol",
         "id": 2,
         "nodeType": "ImportDirective",
@@ -28164,7 +28164,7 @@ module.exports={
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/ethereum-contracts/contracts/Ownable.sol",
+        "absolutePath": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/ethereum-contracts/contracts/Ownable.sol",
         "file": "./Ownable.sol",
         "id": 3,
         "nodeType": "ImportDirective",
@@ -37602,7 +37602,7 @@ module.exports={
   "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.1.tgz",
   "_shasum": "c2d0b7776911b86722c632c3c06c60f2f819939a",
   "_spec": "elliptic@^6.4.0",
-  "_where": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/web/node_modules/eth-lib",
+  "_where": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/web/node_modules/eth-lib",
   "author": {
     "name": "Fedor Indutny",
     "email": "fedor@indutny.com"
@@ -60766,7 +60766,7 @@ module.exports={
   "_resolved": "https://registry.npmjs.org/web3/-/web3-1.0.0-beta.36.tgz",
   "_shasum": "2954da9e431124c88396025510d840ba731c8373",
   "_spec": "web3@^1.0.0-beta.36",
-  "_where": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/web",
+  "_where": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/web",
   "author": {
     "name": "ethereum.org"
   },
@@ -60978,7 +60978,7 @@ module.exports={
   ],
   "_resolved": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
   "_spec": "websocket@git://github.com/frozeman/WebSocket-Node.git#browserifyCompatible",
-  "_where": "/home/adam/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/web/node_modules/web3-providers-ws",
+  "_where": "/home/adam/go/src/github.com/c3systems/c3-sdk-go-example-oracle/web/node_modules/web3-providers-ws",
   "author": {
     "name": "Brian McKelvey",
     "email": "brian@worlize.com",

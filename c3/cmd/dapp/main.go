@@ -8,13 +8,13 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/cfg"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/coder"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/ethereumclient"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/currency"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/ordertype"
-	"github.com/c3systems/Hackathon-EOS-SF-2018/c3/pkg/orderbook/symbol"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/cfg"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/coder"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/ethereumclient"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/orderbook"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/orderbook/currency"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/orderbook/ordertype"
+	"github.com/c3systems/c3-sdk-go-example-oracle/c3/pkg/orderbook/symbol"
 
 	c3 "github.com/c3systems/c3-sdk-go"
 )
@@ -247,15 +247,15 @@ func setState() error {
 	}
 	gPath := os.Getenv("GOPATH")
 
-	if err := os.Remove(fmt.Sprintf("%s/src/github.com/c3systems/Hackathon-EOS-SF-2018/c3/cmd/dapp/state.tar", gPath)); err != nil {
+	if err := os.Remove(fmt.Sprintf("%s/src/github.com/c3systems/c3-sdk-go-example-oracle/c3/cmd/dapp/state.tar", gPath)); err != nil {
 		log.Printf("err removing prev state.tar\n%v", err)
 	}
-	if err := ioutil.WriteFile(fmt.Sprintf("%s/src/github.com/c3systems/Hackathon-EOS-SF-2018/c3/cmd/dapp/state.tar", gPath), prevState, 0644); err != nil {
+	if err := ioutil.WriteFile(fmt.Sprintf("%s/src/github.com/c3systems/c3-sdk-go-example-oracle/c3/cmd/dapp/state.tar", gPath), prevState, 0644); err != nil {
 		log.Printf("err writing state.tar\n%v", err)
 		return err
 	}
 
-	cmd := exec.Command("/bin/sh", fmt.Sprintf("%s/src/github.com/c3systems/Hackathon-EOS-SF-2018/c3/cmd/dapp/set_state.sh", gPath))
+	cmd := exec.Command("/bin/sh", fmt.Sprintf("%s/src/github.com/c3systems/c3-sdk-go-example-oracle/c3/cmd/dapp/set_state.sh", gPath))
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("err running set_state\n%v\nnoutput:\n%s", err, string(out))
@@ -267,14 +267,14 @@ func setState() error {
 
 func getState() error {
 	gPath := os.Getenv("GOPATH")
-	cmd := exec.Command("/bin/sh", fmt.Sprintf("%s/src/github.com/c3systems/Hackathon-EOS-SF-2018/c3/cmd/dapp/get_state.sh", gPath))
+	cmd := exec.Command("/bin/sh", fmt.Sprintf("%s/src/github.com/c3systems/c3-sdk-go-example-oracle/c3/cmd/dapp/get_state.sh", gPath))
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("err running get_state\n%v\nnoutput:\n%s", err, string(out))
 		return err
 	}
 
-	stateBytes, err := ioutil.ReadFile(fmt.Sprintf("%s/src/github.com/c3systems/Hackathon-EOS-SF-2018/c3/cmd/dapp/state.tar", gPath))
+	stateBytes, err := ioutil.ReadFile(fmt.Sprintf("%s/src/github.com/c3systems/c3-sdk-go-example-oracle/c3/cmd/dapp/state.tar", gPath))
 	if err != nil {
 		log.Printf("err reading state tar file\n%v", err)
 		return err
