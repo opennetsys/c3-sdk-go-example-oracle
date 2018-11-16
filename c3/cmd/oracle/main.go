@@ -62,6 +62,10 @@ func main() {
 	}
 	vars = constants.Get()
 
+	if vars.ETH_NodeURL == "" {
+		log.Fatalln("ethereum node URL is not set")
+	}
+
 	// 2. build the eth client
 	ch := make(chan interface{})
 	ethClient, err := ethereumclient.NewClient(&ethereumclient.Config{

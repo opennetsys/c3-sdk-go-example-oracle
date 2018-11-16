@@ -40,5 +40,5 @@ ENV ETH_PRIVATE_KEY 18afdddf061ab614bdacff35bbe3c58b4b464a95db18aecfa7c266fd61b4
 ENV ETH_CONTRACT_ADDRESS 0xb366b07c070c380051893a33681a757116c9c685
 ENV ETH_NODE_URL wss://rinkeby.infura.io/ws
 
-RUN ["chmod", "+x", "/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh"]
-CMD ["/go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh"]
+RUN chmod +x /go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh
+ENTRYPOINT /go/src/github.com/c3systems/Hackathon-EOS-SF-2018/docker-entrypoint.sh
