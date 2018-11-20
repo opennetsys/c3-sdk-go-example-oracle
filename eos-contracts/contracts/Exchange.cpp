@@ -30,7 +30,7 @@ struct deposit
   name sender;
   uint64_t value;
 
-  uint64_t primary_key() const { return sender; }
+  uint64_t primary_key() const { return sender.value; }
 
   EOSLIB_SERIALIZE(deposit, (value))
 };
@@ -48,28 +48,28 @@ class exchange: public eosio::contract
 
     exchange(account_name s) : contract(s), orders_t(_self, _self), deposits_t(_self, _self) {}
 
-    void placeorder(uint64_t price, uint64_t amount, uint64_t value)
+    void placeorder(name acct, uint64_t price, uint64_t amount, uint64_t value)
     {
-      require_auth(_self);
+      require_auth(acct);
 
-      auto itr = deposits_t.find(_self);
-      if (itr != deposits_t.end())
-      {
-        deposits_t.modify(itr, _self, [&](deposit &r) {
-            r.value = r.value + value;
+      auto itr = deposits_t.find(acct.value);
+      if (itr == deposits_t.end()) {
+        deposits_t.emplace(acct.value, [&](auto& r) {
+            r.sender = acct;
+            r.value = value;
             });
       } else {
-        deposits_t.emplace(_self, [&](deposit &r) {
-            r.value = value;
+        deposits_t.modify(itr, acct.value, [&](auto& r) {
+            r.value = r.value + value;
             });
       }
 
-      orders_t.emplace(_self, [&](order &r) {
+      orders_t.emplace(acct.value, [&](auto& r) {
+          r.id = orders_t.available_primary_key();
           r.price = price;
           r.amount = amount;
           r.value = value;
           });
-
     }
 
     void withdraw(account_name receiver, asset value)
@@ -88,4 +88,3 @@ class exchange: public eosio::contract
 };
 
 EOSIO_ABI(exchange, (placeorder)(withdraw))
-  ~

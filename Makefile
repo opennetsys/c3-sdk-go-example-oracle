@@ -6,6 +6,14 @@ env:
 build:
 	@docker build .
 
+.PHONY: build/web
+build/web:
+	@(cd web && make build)
+
+.PHONY: watch/web
+watch/web:
+	@(cd web && make watch)
+
 .PHONY: genesis
 genesis:
 	@GENESIS=true go run c3/cmd/oracle/main.go

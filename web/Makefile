@@ -7,6 +7,10 @@ install:
 build:
 	@browserify main.js > bundle.js
 
+.PHONY: watch
+watch:
+	@watchify main.js -o bundle.js
+
 .PHONY: serve
 serve:
 	@python -m SimpleHTTPServer 3000

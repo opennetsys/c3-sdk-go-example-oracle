@@ -4,14 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes">
   <title></title>
+  <style>
+    input[type="text"] {
+      width: 200px;
+    }
+  </style>
 </head>
 <body>
   <div>
     <form id="sellForm">
       <input type="text" placeholder="EOS amount" id="buyAmount">
-      <input type="text" placeholder="ETH/EOS price" id="buyPrice">
+      <input type="text" placeholder="ETH/EOS price (price of EOS in eth)" id="buyPrice">
       <input type="text" placeholder="ETH deposit amount" id="depositAmount">
       <button type="submit">Sell</button>
+    </form>
+  </div>
+
+  <div>
+    <form id="buyForm">
+      <input type="text" placeholder="ETH amount" id="sellAmount">
+      <input type="text" placeholder="EOS/ETH price (price of ETH in EOS)" id="sellPrice">
+      <input type="text" placeholder="EOS deposit amount" id="depositAmountEos">
+      <button type="submit">Buy</button>
     </form>
   </div>
   <script src="bundle.js"></script>
